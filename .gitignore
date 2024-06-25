@@ -20,7 +20,7 @@
 # Go workspace file
 go.work
 go.work.sum
-.air.toml
 bin/air
 tmp/main
 .env
+tmp/build-errors.log

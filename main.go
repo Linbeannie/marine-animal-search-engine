@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Linbeannie/marine-animal-search-engine/routes"
 	"fmt"
 	"log"
 	"os"
@@ -16,9 +17,8 @@ import (
 func main() {
 	env := godotenv.Load()
 	if env != nil {
-		panic("cannot find enviornment variables")
+		panic("cannot find environment variables")
 	}
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = ":4000"
@@ -32,7 +32,9 @@ func main() {
 
 	app.Use(compress.New())
 
-	//Start server and listen for shutdown
+	routes.SetRoutes(app)
+
+	// Start our server and listen for a shutdown
 	go func() {
 		if err := app.Listen(port); err != nil {
 			log.Panic(err)
@@ -42,7 +44,7 @@ func main() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
-	<-c // Block the main thread until interrupted
+	<-c // Block the main thread until interupted
 	app.Shutdown()
 	fmt.Println("shutting down server")
 }
